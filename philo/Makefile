@@ -6,11 +6,12 @@
 #    By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/02 12:18:52 by kcouchma          #+#    #+#              #
-#    Updated: 2024/04/02 12:36:40 by kcouchma         ###   ########.fr        #
+#    Updated: 2024/04/03 10:39:10 by kcouchma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS = philo
+SRCS =	philo			\
+		check_inputs
 
 SRC = $(addsuffix .c, $(SRCS))
 OBJ = $(addsuffix .o, $(SRCS))
@@ -28,7 +29,7 @@ $(NAME) : $(OBJ)
 
 # -c suppress linking with ld(1) to produce a .o file for each source file
 %.o : %.c
-	$(CC) -c -o $@ $^ $(CFLAGS) 
+	$(CC) -c -o $@ $^ $(CFLAGS)
 
 clean :
 	rm -rf $(OBJ)
