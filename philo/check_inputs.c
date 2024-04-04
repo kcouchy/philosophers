@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 10:37:09 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/03 12:10:42 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/04 15:22:03 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	is_int(char *argv)
 	return ((int)out);
 }
 
-int	check_inputs(int argc, char **argv, t_philo *philo)
+int	check_inputs(int argc, char **argv, t_main *main)
 {
 	int	out;
 	int	i;
@@ -48,25 +48,26 @@ int	check_inputs(int argc, char **argv, t_philo *philo)
 		if (out == -1)
 			return (1);
 		else if (i == 1)
-			philo->num_phil = out;
+			main->num_phils = out;
 		else if (i == 2)
-			philo->time_die = out;
+			main->time_die = out;
 		else if (i == 3)
-			philo->time_eat = out;
+			main->time_eat = out;
 		else if (i == 4)
-			philo->time_sleep = out;
+			main->time_sleep = out;
 		else if (i == 5)
-			philo->num_eat = out;
+			main->num_eat = out;
 		i++;
 	}
-	return (0);
+	return (main->num_phils < 1);//not sure about this condition
 }
 
-void	invalid_input(void)
+int	invalid_input(void)
 {
 	printf("Invalid input, expected syntax is:\n./philo 1 2 3 4 5\n");
-	printf("\t1 = # of philosophers\n\t2 = time to die (ms)\n");
-	printf("\t3 = time to eat (ms)\n\t4 = time to sleep (ms)\n");
-	printf("\t5 (optional) = # of eat cycles\n");
-	printf("*all input values must be between 0 and 2,147,483,647\n");
+	printf("\t1 = # of philosophers (> 1)\n\t2 = time to die (ms)*\n");
+	printf("\t3 = time to eat (ms)*\n\t4 = time to sleep (ms)*\n");
+	printf("\t5 (optional) = # of eat cycles*\n"); //handle when 0
+	printf("*values must be between 0 and 2,147,483,647\n");
+	return (1);
 }

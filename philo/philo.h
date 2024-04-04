@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 12:19:44 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/03 17:47:35 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:20:14 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 # include <pthread.h>
 # include <stdio.h>		//printf
 # include <sys/time.h>	//gettimeofday
-#include <unistd.h>		//usleep
+# include <unistd.h>	//usleep
+# include <stdlib.h>	//malloc, free
 
 /* ************************************************************************** */
 /* typedefs                                                                   */
@@ -28,16 +29,32 @@ typedef unsigned long long ullong;
 /* structures                                                                 */
 /* ************************************************************************** */
 
-typedef struct s_philo
+typedef struct s_phil
 {
-	int	num_phil;
-	int	time_die;
-	int	time_eat;
-	int	time_sleep;
-	int	num_eat;
-	time_t	start_sec;
-	suseconds_t start_usec;
-}	t_philo;
+	int				id;
+	pthread_mutex_t	*r_fork;
+	pthread_mutex_t	*l_fork;
+	pthread_mutex_t	*print_lock;
+	// pthread_mutex_t	*dead_lock;
+	// pthread_mutex_t	*meal_lock;
+	void			*main;
+}	t_phil;
+
+typedef struct s_main
+{
+	int				phil_dead;
+	int				num_phils;
+	int				time_die;
+	int				time_eat;
+	int				time_sleep;
+	int				num_eat;
+	int				*forks;
+	size_t			start_time;
+	t_phil			*phils;	//array of philosophers
+}	t_main;
+
+// pthread_t		variable to hold the id of a thread (like pid for forks)
+// pthread_mutex_t	mutex type variable - to be locked/unlocked/joined/detached
 
 // struct timeval
 // {
@@ -50,14 +67,13 @@ typedef struct s_philo
 /* ************************************************************************** */
 
 int		is_int(char *argv);
-int		check_inputs(int argc, char **argv, t_philo *philo);
-void	invalid_input(void);
+int		check_inputs(int argc, char **argv, t_main *main);
+int		invalid_input(void);
 
 /* ************************************************************************** */
 /* utils                                                                      */
 /* ************************************************************************** */
 
-ullong	elapsed_ms(t_philo *philo);
-int		set_timer(t_philo *philo);
+ullong	elapsed_time(t_main *main);
 
 #endif
