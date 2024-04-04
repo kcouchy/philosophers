@@ -18,7 +18,7 @@ SRC = $(addsuffix .c, $(SRCS))
 OBJ = $(addsuffix .o, $(SRCS))
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -pthread -g
+CFLAGS = -Wall -Wextra -Werror -pthread -g -fsanitize=address
 
 NAME = philo
 

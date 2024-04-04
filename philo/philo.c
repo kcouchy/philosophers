@@ -84,7 +84,7 @@ int	main(int argc, char **argv)
 	if (!phils)
 		return (printf("initialisation error\n"));
 	if (init_main(&main, phils) == -1)
-		return (free(phils), printf("initialisation error\n"));
+		return (ft_free(2, phils, main.forks), printf("initialisation error\n"));
 	ft_philo(&main);
-	return (free(phils), 0);
+	return (ft_free(2, phils, main.forks), 0);
 }

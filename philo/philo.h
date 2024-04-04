@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 12:19:44 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/04 17:20:14 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:48:46 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <sys/time.h>	//gettimeofday
 # include <unistd.h>	//usleep
 # include <stdlib.h>	//malloc, free
+# include <stdarg.h>	//va_args
 
 /* ************************************************************************** */
 /* typedefs                                                                   */
@@ -74,6 +75,7 @@ int		invalid_input(void);
 /* utils                                                                      */
 /* ************************************************************************** */
 
+void	ft_free(size_t n, ...);
 ullong	elapsed_time(t_main *main);
 
 #endif
