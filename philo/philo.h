@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 12:19:44 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/04 17:48:46 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/05 15:04:33 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,9 @@ typedef unsigned long long ullong;
 typedef struct s_phil
 {
 	int				id;
-	pthread_mutex_t	*r_fork;
-	pthread_mutex_t	*l_fork;
-	pthread_mutex_t	*print_lock;
-	// pthread_mutex_t	*dead_lock;
-	// pthread_mutex_t	*meal_lock;
+	pthread_mutex_t	*r_fork;		//pointer to the eventual fork mutexes (n && n +/- 1)
+	pthread_mutex_t	*l_fork;		//pointer to the eventual fork mutexes (n && n +/- 1)
+	size_t			time_last_eat;
 	void			*main;
 }	t_phil;
 
@@ -49,8 +47,11 @@ typedef struct s_main
 	int				time_eat;
 	int				time_sleep;
 	int				num_eat;
-	int				*forks;
+	pthread_mutex_t	*forks;
 	size_t			start_time;
+	// pthread_mutex_t	print_lock;
+	// pthread_mutex_t	dead_lock;
+	// pthread_mutex_t	meal_lock;
 	t_phil			*phils;	//array of philosophers
 }	t_main;
 
@@ -75,7 +76,15 @@ int		invalid_input(void);
 /* utils                                                                      */
 /* ************************************************************************** */
 
+int		start_time(t_main *main);
 void	ft_free(size_t n, ...);
 ullong	elapsed_time(t_main *main);
+
+/* ************************************************************************** */
+/* inits                                                                      */
+/* ************************************************************************** */
+
+t_phil	*init_phils(t_main *main, t_phil *phils);
+int		init_main(t_main *main, t_phil *phils);
 
 #endif

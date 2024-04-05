@@ -6,13 +6,14 @@
 #    By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/02 12:18:52 by kcouchma          #+#    #+#              #
-#    Updated: 2024/04/03 15:14:18 by kcouchma         ###   ########.fr        #
+#    Updated: 2024/04/05 12:14:01 by kcouchma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS =	philo			\
 		check_inputs	\
-		utils
+		utils			\
+		inits
 
 SRC = $(addsuffix .c, $(SRCS))
 OBJ = $(addsuffix .o, $(SRCS))
