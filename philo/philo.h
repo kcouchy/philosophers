@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 12:19:44 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/05 15:04:33 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/08 12:18:15 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_phil
 	int				id;
 	pthread_mutex_t	*r_fork;		//pointer to the eventual fork mutexes (n && n +/- 1)
 	pthread_mutex_t	*l_fork;		//pointer to the eventual fork mutexes (n && n +/- 1)
+	pthread_t		thread_id;
 	size_t			time_last_eat;
 	void			*main;
 }	t_phil;
@@ -49,10 +50,11 @@ typedef struct s_main
 	int				num_eat;
 	pthread_mutex_t	*forks;
 	size_t			start_time;
+	pthread_t		monitor_id;
 	// pthread_mutex_t	print_lock;
 	// pthread_mutex_t	dead_lock;
 	// pthread_mutex_t	meal_lock;
-	t_phil			*phils;	//array of philosophers
+	void			*phils;	//pointer to array of philosophers struct t_phil
 }	t_main;
 
 // pthread_t		variable to hold the id of a thread (like pid for forks)
@@ -84,7 +86,17 @@ ullong	elapsed_time(t_main *main);
 /* inits                                                                      */
 /* ************************************************************************** */
 
+int		init_threads(t_main *main, t_phil *phils);
 t_phil	*init_phils(t_main *main, t_phil *phils);
 int		init_main(t_main *main, t_phil *phils);
+
+/* ************************************************************************** */
+/* philo (main)                                                               */
+/* ************************************************************************** */
+
+void	*ft_philo(void *phil);
+void	*ft_monitor(void *phil);
+int		ft_clean(t_main *main, t_phil *phils, char *message, int return_val);
+int		main(int argc, char **argv);
 
 #endif

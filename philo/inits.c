@@ -6,11 +6,40 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 12:13:22 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/05 15:13:09 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/08 12:41:12 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+//make phil threads + monitoring thread
+int	init_threads(t_main *main, t_phil *phils)
+{
+	int	i;
+
+	i = 0;
+// create threads to run the thread functions
+	if (pthread_create(&main->monitor_id, NULL, &ft_monitor, &phils->main) != 0)
+		return (ft_clean(main, phils, "pthread_create fail : monitor", 1));
+	while (i < main->num_phils)
+	{
+		if (pthread_create(&((t_phil *)main->phils)[i].thread_id, NULL, &ft_philo, &main->phils[i]) != 0)
+			return (ft_clean(main, phils, "pthread_create fail : philosopher", 1));
+		i++;
+	}
+// join the threads to wait for termination before returning main
+	if (pthread_join(main->monitor_id, NULL) != 0)
+		return (ft_clean(main, phils, "pthread_join fail : monitor", 1));
+	i = 0;
+	while (i < main->num_phils)
+	{
+		if (pthread_join(((t_phil *)main->phils)[i].thread_id, NULL) != 0)
+			return (ft_clean(main, phils, "pthread_join fail : philosopher", 1));
+		i++;
+	}
+// destroy the mutexes
+	return (ft_clean(main, phils, "end of meals", 0));
+}
 
 t_phil	*init_phils(t_main *main, t_phil *phils)
 {
