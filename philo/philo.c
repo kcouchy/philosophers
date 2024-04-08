@@ -12,22 +12,22 @@
 
 #include "philo.h"
 
-void	*ft_philo(void *phil)
+void	*ft_philo(void *data)
 {
-	int	i;
+	t_phil	*phil;
 
-	i = 0;
-	while (i < ((t_main *)((t_phil *)phil)->main)->num_phils)
-	{
-		printf("phil id: %d\n", ((t_phil *)((t_main *)((t_phil *)phil)->main)->phils)[i].id);
-		i++;
-	}
+	phil = (t_phil *)data;
+	printf("here\n");
+	printf("phil id: %lu\n", phil->thread_id);
 	return (phil);
 }
 
-void	*ft_monitor(void *main)
+void	*ft_monitor(void *data)
 {
-	printf("monitor id: %lu\n", ((t_main *)main)->monitor_id);
+	t_main	*main;
+
+	main = (t_main *)data;
+	printf("monitor id: %lu\n", main->monitor_id);
 	return (main);
 }
 
@@ -59,6 +59,6 @@ int	main(int argc, char **argv)
 		return (printf("malloc error : phils\n"));
 	if (init_main(&main, phils) == -1)
 		return (ft_clean(&main, phils, "malloc error : main", 1));
-	//ft_philo(&main);
-	return (ft_clean(&main, phils, "", 0));
+	return (init_threads(&main, phils));
+	// return (ft_clean(&main, phils, "", 0));
 }

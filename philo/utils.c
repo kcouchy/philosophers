@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:13:46 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/05 12:26:00 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/08 17:43:35 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,17 @@ ullong	elapsed_time(t_main *main)
 	return (ms - main->start_time);
 }
 
-//add null check?
 void	ft_free(size_t n, ...)
 {
 	va_list	args;
+	void	*arg;
 
 	va_start(args, n);
 	while (n)
 	{
-		free(va_arg(args, void *));
+		arg = va_arg(args, void *);
+		if (arg)
+			free(arg);
 		n--;
 	}
 }

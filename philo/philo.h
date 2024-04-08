@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 12:19:44 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/08 12:18:15 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/08 17:29:25 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,7 @@ typedef unsigned long long ullong;
 /* structures                                                                 */
 /* ************************************************************************** */
 
-typedef struct s_phil
-{
-	int				id;
-	pthread_mutex_t	*r_fork;		//pointer to the eventual fork mutexes (n && n +/- 1)
-	pthread_mutex_t	*l_fork;		//pointer to the eventual fork mutexes (n && n +/- 1)
-	pthread_t		thread_id;
-	size_t			time_last_eat;
-	void			*main;
-}	t_phil;
+typedef struct s_phil	t_phil;
 
 typedef struct s_main
 {
@@ -54,8 +46,18 @@ typedef struct s_main
 	// pthread_mutex_t	print_lock;
 	// pthread_mutex_t	dead_lock;
 	// pthread_mutex_t	meal_lock;
-	void			*phils;	//pointer to array of philosophers struct t_phil
+	t_phil			*phils;	//pointer to array of philosophers struct t_phil
 }	t_main;
+
+struct s_phil
+{
+	int				id;
+	pthread_mutex_t	*r_fork;		//pointer to the eventual fork mutexes (n && n +/- 1)
+	pthread_mutex_t	*l_fork;		//pointer to the eventual fork mutexes (n && n +/- 1)
+	pthread_t		thread_id;
+	size_t			time_last_eat;
+	t_main			*main;
+};
 
 // pthread_t		variable to hold the id of a thread (like pid for forks)
 // pthread_mutex_t	mutex type variable - to be locked/unlocked/joined/detached
@@ -94,8 +96,8 @@ int		init_main(t_main *main, t_phil *phils);
 /* philo (main)                                                               */
 /* ************************************************************************** */
 
-void	*ft_philo(void *phil);
-void	*ft_monitor(void *phil);
+void	*ft_philo(void *data);
+void	*ft_monitor(void *data);
 int		ft_clean(t_main *main, t_phil *phils, char *message, int return_val);
 int		main(int argc, char **argv);
 

@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 12:13:22 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/08 12:41:12 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/08 17:42:26 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,10 @@ t_phil	*init_phils(t_main *main, t_phil *phils)
 		phils[i].main = main;
 		phils[i].time_last_eat = main->start_time;
 		phils[i].r_fork = &(main)->forks[i];
-		// printf("phil %d takes fork %d as r_fork\n", phils[i].id, i);
 		if (i == 0)
-		{
 			phils[i].l_fork = &(main)->forks[main->num_phils - 1];
-			// printf("phil %d takes fork %d as l_fork\n", phils[i].id, main->num_phils - 1);
-		}
 		else
-		{
 			phils[i].l_fork = &(main)->forks[i - 1];
-			// printf("phil %d takes fork %d as l_fork\n", phils[i].id, i - 1);
-		}
 		i++;
 	}
 	return (phils);
@@ -84,6 +77,9 @@ int	init_main(t_main *main, t_phil *phils)
 	if (main->forks == NULL)
 		return (-1);
 	while (++i < main->num_phils)
-		pthread_mutex_init(&(main)->forks[i], NULL);
+	{
+		if (pthread_mutex_init(&(main)->forks[i], NULL) != 0)
+			return (-1);
+	}
 	return (0);
 }
