@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 12:13:22 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/11 12:21:39 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/11 18:59:33 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_phil	*init_phils(t_main *main, t_phil *phils)
 		phils[i].id = i + 1;
 		phils[i].main = main;
 		phils[i].time_last_eat = main->start_time;
-		phils[i].num_eat = 0;
+		phils[i].num_eat = main->num_eat;
 		phils[i].r_fork = &(main)->forks[i];
 		if (i == 0)
 			phils[i].l_fork = &(main)->forks[main->num_phils - 1];
@@ -71,11 +71,16 @@ int	init_main(t_main *main, t_phil *phils)
 
 	i = -1;
 	main->phil_dead = 0;
-	main->num_eat = -1;
 	main->phils = phils;
 	main->forks = NULL;
 	main->forks = malloc(sizeof(pthread_mutex_t) * main->num_phils);
 	if (main->forks == NULL)
+		return (-1);
+	if (pthread_mutex_init(&(main)->print_lock, NULL) != 0)
+		return (-1);
+	if (pthread_mutex_init(&(main)->dead_lock, NULL) != 0)
+		return (-1);
+	if (pthread_mutex_init(&(main)->num_eat_lock, NULL) != 0)
 		return (-1);
 	while (++i < main->num_phils)
 	{

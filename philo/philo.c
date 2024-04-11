@@ -17,8 +17,7 @@ void	*ft_philo(void *data)
 	t_phil	*phil;
 
 	phil = (t_phil *)data;
-	// printf("here\n");
-	printf("phil id: %lu\n", phil->thread_id);
+	print_lock(phil->main, 0, "phil_thread");
 	return (phil);
 }
 
@@ -29,8 +28,13 @@ int	ft_clean(t_main *main, t_phil *phils, char *message, int return_val)
 	i = -1;
 	while (++i < main->num_phils)
 		pthread_mutex_destroy(&(main)->forks[i]);
+	pthread_mutex_destroy(&(main)->print_lock);
+	pthread_mutex_destroy(&(main)->dead_lock);
+	pthread_mutex_destroy(&(main)->num_eat_lock);
 	ft_free(2, phils, main->forks);
-	printf("%s\n", message);//ADD PRINT MUTEX HERE?
+	CHECK HERE - when no meals but dead first
+	if (main->num_eat != -1)
+		print_lock(main, 0, message);
 	return (return_val);
 }
 
@@ -50,7 +54,5 @@ int	main(int argc, char **argv)
 		return (printf("malloc error : phils\n"));
 	if (init_main(&main, phils) == -1)
 		return (ft_clean(&main, phils, "malloc error : main", 1));
-	printf("_____________________last eat : %llu\n", main.phils->time_last_eat);
 	return (init_threads(&main, phils));
-	// return (ft_clean(&main, phils, "", 0));
 }

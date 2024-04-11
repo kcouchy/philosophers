@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:12:58 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/11 12:42:41 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/11 19:05:34 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ static int	_check_death(t_main *main)
 	i = 0;
 	while (i < main->num_phils)
 	{
-		if ((elapsed_time(main) - main->phils[i].time_last_eat) > main->time_die)
+		if (elapsed_time(main) > main->time_die)
 		{
-			main->phil_dead = 1;
+			phil_dead_lock(main, 1);
 			print_lock(main, i + 1, "died");
 			return (1);
 		}
@@ -39,10 +39,11 @@ static int	_check_num_eat(t_main *main)
 		return (0);
 	while (i < main->num_phils)
 	{
-		if (main->phils[i].num_eat != 0)
+		if (num_eat_lock(main, &(main->phils)[i], -1) != 0)
 			return (0);
 		i++;
 	}
+	main->num_eat = 0; //NEED A MUTEX HERE? should only be used in the monitor thread
 	return (1);
 }
 
@@ -52,11 +53,6 @@ void	*ft_monitor(void *data)
 	t_main	*main;
 
 	main = (t_main *)data;
-	// printf("monitor id: %lu\n", main->monitor_id);
-	printf("**********************start time : %llu\n", main->start_time);
-	printf("**********************elapsed time : %llu\n", elapsed_time(main));
-	printf ("========================%p\n", data);
-	printf("**********************last eat : %llu\n", main->phils->time_last_eat);
 	while (1)
 	{
 		if (_check_death(main) != 0 || _check_num_eat(main) != 0)

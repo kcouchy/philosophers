@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 12:19:44 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/11 12:41:55 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/11 18:55:14 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ typedef struct s_main
 	t_ullong		start_time;
 	pthread_t		monitor_id;
 	pthread_mutex_t	print_lock;
-	// pthread_mutex_t	dead_lock;
-	// pthread_mutex_t	meal_lock;
+	pthread_mutex_t	dead_lock;
+	pthread_mutex_t	num_eat_lock;
 	t_phil			*phils;	//pointer to array of philosophers struct t_phil
 }	t_main;
 
@@ -106,7 +106,41 @@ void		*ft_monitor(void *data);
 /* locks                                                                      */
 /* ************************************************************************** */
 
+/**
+ * @brief 
+ * 
+ * @param main 
+ * @param phil 
+ * @param message 
+ */
 void	print_lock(t_main *main, int phil, char *message);
+
+/**
+ * @brief To check or modify the flag at main->phil_dead which indicates a 
+ * philosopher has died (1) or not (0).
+ * locks main->dead_lock mutex
+ * Checks the variable main->phil_dead
+ * If mod != -1, sets main->phil_dead = mod
+ * If mod == -1, returns just the phil_dead
+ * @param main pointer to main to access mutex
+ * @param mod flag to modify or not phil_dead, and the value to set
+ * @return int 
+ */
+int		phil_dead_lock(t_main *main, int mod);
+
+/**
+ * @brief To check or modify the variable phil->num_eat which stores the number
+ * of times a philopher has left to eat (starts at main->num_eat)
+ * locks main->num_eat_lock mutex
+ * Checks the variable phil[i]->num_eat sent as *phil
+ * If mod != -1, decrements num_eat before returning the new value
+ * If mod == -1, returns just the num_eat
+ * @param main pointer to main to access mutex
+ * @param phil pointer to a philospher = phil[i] in the structure array
+ * @param mod flag to modify or not num_eat
+ * @return int value of phil->num_eat
+ */
+int		num_eat_lock(t_main *main, t_phil *phil, int mod);
 
 /* ************************************************************************** */
 /* philo (main)                                                               */

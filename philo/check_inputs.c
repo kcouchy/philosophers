@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 10:37:09 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/11 10:30:31 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/11 19:01:20 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	check_inputs(int argc, char **argv, t_main *main)
 	(void)argc;
 	while (argv[i])
 	{
+		main->num_eat = -1;
 		out = is_int(argv[i]);
 		if (out == -1)
 			return (1);
