@@ -17,18 +17,9 @@ void	*ft_philo(void *data)
 	t_phil	*phil;
 
 	phil = (t_phil *)data;
-	printf("here\n");
+	// printf("here\n");
 	printf("phil id: %lu\n", phil->thread_id);
 	return (phil);
-}
-
-void	*ft_monitor(void *data)
-{
-	t_main	*main;
-
-	main = (t_main *)data;
-	printf("monitor id: %lu\n", main->monitor_id);
-	return (main);
 }
 
 int	ft_clean(t_main *main, t_phil *phils, char *message, int return_val)
@@ -47,7 +38,7 @@ int	ft_clean(t_main *main, t_phil *phils, char *message, int return_val)
 int	main(int argc, char **argv)
 {
 	t_main	main;
-	t_phil *phils;
+	t_phil	*phils;
 
 	phils = NULL;
 	if (start_time(&main) == -1)
@@ -59,6 +50,7 @@ int	main(int argc, char **argv)
 		return (printf("malloc error : phils\n"));
 	if (init_main(&main, phils) == -1)
 		return (ft_clean(&main, phils, "malloc error : main", 1));
+	printf("_____________________last eat : %llu\n", main.phils->time_last_eat);
 	return (init_threads(&main, phils));
 	// return (ft_clean(&main, phils, "", 0));
 }

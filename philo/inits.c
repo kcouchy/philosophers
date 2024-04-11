@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 12:13:22 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/08 17:42:26 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/11 12:21:39 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	init_threads(t_main *main, t_phil *phils)
 
 	i = 0;
 // create threads to run the thread functions
-	if (pthread_create(&main->monitor_id, NULL, &ft_monitor, &phils->main) != 0)
+	if (pthread_create(&main->monitor_id, NULL, &ft_monitor, main) != 0)
 		return (ft_clean(main, phils, "pthread_create fail : monitor", 1));
 	while (i < main->num_phils)
 	{
@@ -54,6 +54,7 @@ t_phil	*init_phils(t_main *main, t_phil *phils)
 		phils[i].id = i + 1;
 		phils[i].main = main;
 		phils[i].time_last_eat = main->start_time;
+		phils[i].num_eat = 0;
 		phils[i].r_fork = &(main)->forks[i];
 		if (i == 0)
 			phils[i].l_fork = &(main)->forks[main->num_phils - 1];

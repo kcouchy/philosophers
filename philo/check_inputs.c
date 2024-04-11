@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 10:37:09 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/04 15:22:03 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/11 10:30:31 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ int	is_int(char *argv)
 	out = 0;
 	if (!argv[i])
 		return (-1);
-	while(argv[i])
+	while (argv[i])
 	{
 		if (argv[i] > '9' || argv[i] < '0')
-			return(-1);
+			return (-1);
 		out *= 10;
 		out += (argv[i] - '0');
 		if (out > 2147483647)
-			return(-1);
+			return (-1);
 		i++;
 	}
 	return ((int)out);
