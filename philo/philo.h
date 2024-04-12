@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 12:19:44 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/11 18:55:14 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/12 13:20:01 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_main
 	pthread_mutex_t	print_lock;
 	pthread_mutex_t	dead_lock;
 	pthread_mutex_t	num_eat_lock;
+	pthread_mutex_t	last_eat_lock;
 	t_phil			*phils;	//pointer to array of philosophers struct t_phil
 }	t_main;
 
@@ -57,6 +58,7 @@ struct s_phil
 	pthread_mutex_t	*l_fork;		//pointer to the eventual fork mutexes (n && n +/- 1)
 	pthread_t		thread_id;
 	t_ullong		time_last_eat;
+	t_ullong		time_wait;
 	int				num_eat;
 	t_main			*main;
 };
@@ -141,6 +143,18 @@ int		phil_dead_lock(t_main *main, int mod);
  * @return int value of phil->num_eat
  */
 int		num_eat_lock(t_main *main, t_phil *phil, int mod);
+
+t_ullong	time_last_eat_lock(t_main *main, t_phil *phil, int mod);
+
+/**
+ * @brief 	grab both forks
+	change time last eat to now
+	useleep eat time
+	decrement num_eat
+	let go of forks
+ * @param phil philospher structure
+ */
+void	eat_lock(t_phil *phil);
 
 /* ************************************************************************** */
 /* philo (main)                                                               */

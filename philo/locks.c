@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:30 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/11 18:50:49 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/12 15:39:10 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,33 @@ int	num_eat_lock(t_main *main, t_phil *phil, int mod)
 	num_eat = phil->num_eat;
 	pthread_mutex_unlock(&(main)->num_eat_lock);
 	return (num_eat);
+}
+
+t_ullong	time_last_eat_lock(t_main *main, t_phil *phil, int mod)
+{
+	t_ullong	time_last_eat;
+
+	pthread_mutex_lock(&(main)->last_eat_lock);
+	if (mod != -1)
+		phil->time_last_eat = elapsed_time(main);
+	time_last_eat = phil->time_last_eat;
+	pthread_mutex_unlock(&(main)->last_eat_lock);
+	return (time_last_eat);
+}
+
+void	eat_lock(t_phil *phil)
+{
+	pthread_mutex_lock(phil->r_fork);
+	print_lock(phil->main, phil->id, "has taken a fork");
+	pthread_mutex_lock(phil->l_fork);
+	print_lock(phil->main, phil->id, "has taken a fork");
+	if (phil_dead_lock(phil->main, -1) == 0)
+	{
+		print_lock(phil->main, phil->id, "is eating");
+		time_last_eat_lock(phil->main, phil, 1);
+		usleep(phil->main->time_eat);
+		num_eat_lock(phil->main, phil, 1);
+	}
+	pthread_mutex_unlock(phil->r_fork);
+	pthread_mutex_unlock(phil->l_fork);
 }

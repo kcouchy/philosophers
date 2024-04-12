@@ -12,12 +12,31 @@
 
 #include "philo.h"
 
+// even numbered philos wait half the eat time before trying to grab a fork to 
+// avoid deadlocks
 void	*ft_philo(void *data)
 {
 	t_phil	*phil;
 
 	phil = (t_phil *)data;
-	print_lock(phil->main, 0, "phil_thread");
+	// print_lock(phil->main, 0, "phil_thread");
+	// printf("phil %d\n", phil->id);
+	if (phil->id % 2 == 0)
+		usleep(phil->time_wait);
+	// printf("%d\n", phil_dead_lock(phil->main, -1));
+	// printf("num eat%d\n", num_eat_lock(phil->main, phil, -1));
+	while (phil_dead_lock(phil->main, -1) == 0
+			&& num_eat_lock(phil->main, phil, -1) != 0)
+	{
+		eat_lock(phil);
+		if (phil_dead_lock(phil->main, -1) == 0)
+		{
+			print_lock(phil->main, phil->id, "is sleeping");
+			usleep(phil->main->time_sleep);
+		}
+		if (phil_dead_lock(phil->main, -1) == 0)
+			print_lock(phil->main, phil->id, "is thinking");
+	}
 	return (phil);
 }
 
@@ -31,8 +50,8 @@ int	ft_clean(t_main *main, t_phil *phils, char *message, int return_val)
 	pthread_mutex_destroy(&(main)->print_lock);
 	pthread_mutex_destroy(&(main)->dead_lock);
 	pthread_mutex_destroy(&(main)->num_eat_lock);
+	pthread_mutex_destroy(&(main)->last_eat_lock);
 	ft_free(2, phils, main->forks);
-	CHECK HERE - when no meals but dead first
 	if (main->num_eat != -1)
 		print_lock(main, 0, message);
 	return (return_val);

@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:13:46 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/11 11:25:14 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/12 13:17:41 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	start_time(t_main *main)
 	return (0);
 }
 
+//may need to add an if 0 to this to pick up when gettimeofday fails
 t_ullong	elapsed_time(t_main *main)
 {
 	t_ullong		ms;
