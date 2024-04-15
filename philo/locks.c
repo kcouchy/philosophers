@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:30 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/12 15:39:10 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/15 11:39:27 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	eat_lock(t_phil *phil)
 	{
 		print_lock(phil->main, phil->id, "is eating");
 		time_last_eat_lock(phil->main, phil, 1);
-		usleep(phil->main->time_eat);
+		usleep(phil->main->time_eat * 1000);
 		num_eat_lock(phil->main, phil, 1);
 	}
 	pthread_mutex_unlock(phil->r_fork);

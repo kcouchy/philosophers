@@ -32,7 +32,7 @@ void	*ft_philo(void *data)
 		if (phil_dead_lock(phil->main, -1) == 0)
 		{
 			print_lock(phil->main, phil->id, "is sleeping");
-			usleep(phil->main->time_sleep);
+			usleep(phil->main->time_sleep * 1000);
 		}
 		if (phil_dead_lock(phil->main, -1) == 0)
 			print_lock(phil->main, phil->id, "is thinking");
