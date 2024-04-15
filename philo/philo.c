@@ -12,21 +12,15 @@
 
 #include "philo.h"
 
-// even numbered philos wait half the eat time before trying to grab a fork to 
-// avoid deadlocks
 void	*ft_philo(void *data)
 {
 	t_phil	*phil;
 
 	phil = (t_phil *)data;
-	// print_lock(phil->main, 0, "phil_thread");
-	// printf("phil %d\n", phil->id);
 	if (phil->id % 2 == 0)
 		usleep(phil->time_wait);
-	// printf("%d\n", phil_dead_lock(phil->main, -1));
-	// printf("num eat%d\n", num_eat_lock(phil->main, phil, -1));
 	while (phil_dead_lock(phil->main, -1) == 0
-			&& num_eat_lock(phil->main, phil, -1) != 0)
+		&& num_eat_lock(phil->main, phil, -1) != 0)
 	{
 		eat_lock(phil);
 		if (phil_dead_lock(phil->main, -1) == 0)
@@ -57,7 +51,6 @@ int	ft_clean(t_main *main, t_phil *phils, char *message, int return_val)
 	return (return_val);
 }
 
-//remove error messages from return so that return value can be correct?
 int	main(int argc, char **argv)
 {
 	t_main	main;
@@ -65,13 +58,19 @@ int	main(int argc, char **argv)
 
 	phils = NULL;
 	if (start_time(&main) == -1)
-		return (printf("gettimeofday error : start_time\n"));
+	{
+		printf("gettimeofday error : start_time\n");
+		return (1);
+	}
 	if (!((argc == 5 || argc == 6) && check_inputs(argc, argv, &main) == 0))
 		return (invalid_input());
 	phils = init_phils(&main, phils);
 	if (!phils)
-		return (printf("malloc error : phils\n"));
-	if (init_main(&main, phils) == -1)
+	{
+		printf("malloc error : phils\n");
+		return (1);
+	}
+	if (init_main(&main, phils) == 1 || point_forks(&main, phils) != 0)
 		return (ft_clean(&main, phils, "malloc error : main", 1));
 	return (init_threads(&main, phils));
 }
