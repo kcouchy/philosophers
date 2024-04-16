@@ -66,7 +66,7 @@ int	check_inputs(int argc, char **argv, t_main *main)
 int	invalid_input(void)
 {
 	printf("Invalid input, expected syntax is:\n./philo 1 2 3 4 5\n");
-	printf("\t1 = # of philosophers (> 1)\n\t2 = time to die (ms)*\n");
+	printf("\t1 = # of philosophers (>= 1)\n\t2 = time to die (ms)*\n");
 	printf("\t3 = time to eat (ms)*\n\t4 = time to sleep (ms)*\n");
 	printf("\t5 (optional) = # of eat cycles*\n");
 	printf("*values must be between 0 and 2,147,483,647\n");
