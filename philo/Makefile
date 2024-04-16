@@ -6,7 +6,7 @@
 #    By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/02 12:18:52 by kcouchma          #+#    #+#              #
-#    Updated: 2024/04/16 11:40:11 by kcouchma         ###   ########.fr        #
+#    Updated: 2024/04/16 17:57:08 by kcouchma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ SRC = $(addsuffix .c, $(SRCS))
 OBJ = $(addsuffix .o, $(SRCS))
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -pthread -g #-fsanitize=thread -O0#-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -pthread -fsanitize=thread #-g -fsanitize=address
 
 NAME = philo
 

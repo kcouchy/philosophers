@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 12:19:44 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/16 14:09:37 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/16 18:13:30 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,27 @@ t_ullong	elapsed_time(t_main *main);
  */
 void		ft_free(size_t n, ...);
 
+/**
+ * @brief string compare function, compares two strings and returns the 
+ * difference (0 if identical)
+ * 
+ * @param s1 first string
+ * @param s2 second string
+ * @return int difference (0 if none)
+ */
 int			ft_strcmp(char *s1, char *s2);
+
+/**
+ * @brief Cleanup function : destroys mutexes, frees mallocs (phil struct array
+ * + fork array)
+ * 
+ * @param main pointer to main struct
+ * @param phils phil->id to print, 0 if none
+ * @param message message to be printed to output
+ * @param ret_val return value wanted
+ * @return int ret_val (return value wanted)
+ */
+int			ft_clean(t_main *main, t_phil *phils, char *message, int ret_val);
 
 /* ************************************************************************** */
 /* locks                                                                      */
@@ -178,7 +198,9 @@ int			ft_strcmp(char *s1, char *s2);
 /**
  * @brief To print the required messages with the correct syntax without mixing
  * due to parrallel threads.
- * 
+ * Checks the main->print_flag flag to see if the message should be printed.
+ * If a philosopher has died, or if the end of meals message is sent (phil == 0)
+ * then no further printing occurs.
  * @param main pointer to main to access mutex
  * @param phil phil->id to identify the philosopher or 0 if nothing
  * @param message message to print
@@ -212,17 +234,31 @@ int			phil_dead_lock(t_main *main, int mod);
  */
 int			num_eat_lock(t_main *main, t_phil *phil, int mod);
 
+/**
+ * @brief To check (by monitor) or modify (once eating starts) the time_last_eat
+ * variable in each philosopher's structure
+ * @param main pointer to main to access mutex
+ * @param phil 
+ * @param mod flag to modify or not time_last_eat
+ * @return t_ullong value of time_last_eat (updated or not)
+ */
 t_ullong	time_last_eat_lock(t_main *main, t_phil *phil, int mod);
 
 /**
- * @brief 	grab both forks
-	change time last eat to now
-	useleep eat time
-	decrement num_eat
-	let go of forks
+ * @brief function for eat cycle - with regular checks for death
+ * Philosopher grabs the right fork, if there is only one philosopher - there
+ * is no other fork so (r_fork = l_fork) and the function returns to end the 
+ * thread.
+ * Otherwise, philosopher grabs the left fork then eating begins:
+ * 	change time last eat to now
+ * 	useleep eat time
+ * 	decrement num_eat
+ * Philosopher lets go of both forks.
  * @param phil philospher structure
+ * @return int flag 1 for one philosopher (r_fork=l_fork -> end thread), 
+	0 otherwise
  */
-void		eat_lock(t_phil *phil);
+int			eat_lock(t_phil *phil);
 
 /* ************************************************************************** */
 /* monitor                                                                    */
@@ -276,18 +312,6 @@ void		*ft_monitor(void *data);
  * @return void* pointer to phil[i] struct for each philosopher
  */
 void		*ft_philo(void *data);
-
-/**
- * @brief Cleanup function : destroys mutexes, frees mallocs (phil struct array
- * + fork array)
- * 
- * @param main pointer to main struct
- * @param phils phil->id to print, 0 if none
- * @param message message to be printed to output
- * @param ret_val return value wanted
- * @return int ret_val (return value wanted)
- */
-int			ft_clean(t_main *main, t_phil *phils, char *message, int ret_val);
 
 /**
  * @brief philosopher program :

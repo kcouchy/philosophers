@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 15:13:46 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/12 13:17:41 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/16 18:10:14 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,37 @@ void	ft_free(size_t n, ...)
 			free(arg);
 		n--;
 	}
+}
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	if (!s1 || !s2)
+		return (-1);
+	while (s1[i] && s2[i])
+	{
+		if (s1[i] != s2[i])
+			break ;
+		i++;
+	}
+	return (s1[i] != s2[i]);
+}
+
+int	ft_clean(t_main *main, t_phil *phils, char *message, int return_val)
+{
+	int	i;
+
+	i = -1;
+	while (++i < main->num_phils)
+		pthread_mutex_destroy(&(main)->forks[i]);
+	pthread_mutex_destroy(&(main)->print_lock);
+	pthread_mutex_destroy(&(main)->dead_lock);
+	pthread_mutex_destroy(&(main)->num_eat_lock);
+	pthread_mutex_destroy(&(main)->last_eat_lock);
+	ft_free(2, phils, main->forks);
+	if (main->num_eat == 0)
+		printf("%s\n", message);
+	return (return_val);
 }

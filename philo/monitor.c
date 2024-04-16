@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 11:12:58 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/16 14:18:38 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/16 18:10:04 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,20 +59,4 @@ void	*ft_monitor(void *data)
 			break ;
 	}
 	return (main);
-}
-
-int	ft_strcmp(char *s1, char *s2)
-{
-	int	i;
-
-	i = 0;
-	if (!s1 || !s2)
-		return (-1);
-	while (s1[i] && s2[i])
-	{
-		if (s1[i] != s2[i])
-			break ;
-		i++;
-	}
-	return (s1[i] != s2[i]);
 }

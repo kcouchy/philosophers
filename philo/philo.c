@@ -22,7 +22,8 @@ void	*ft_philo(void *data)
 	while (phil_dead_lock(phil->main, -1) == 0
 		&& num_eat_lock(phil->main, phil, -1) != 0)
 	{
-		eat_lock(phil);
+		if (eat_lock(phil) == 1)
+			return (phil);
 		if (phil_dead_lock(phil->main, -1) == 0)
 		{
 			print_lock(phil->main, phil->id, "is sleeping");
@@ -32,23 +33,6 @@ void	*ft_philo(void *data)
 			print_lock(phil->main, phil->id, "is thinking");
 	}
 	return (phil);
-}
-
-int	ft_clean(t_main *main, t_phil *phils, char *message, int return_val)
-{
-	int	i;
-
-	i = -1;
-	while (++i < main->num_phils)
-		pthread_mutex_destroy(&(main)->forks[i]);
-	pthread_mutex_destroy(&(main)->print_lock);
-	pthread_mutex_destroy(&(main)->dead_lock);
-	pthread_mutex_destroy(&(main)->num_eat_lock);
-	pthread_mutex_destroy(&(main)->last_eat_lock);
-	ft_free(2, phils, main->forks);
-	if (main->num_eat == 0)
-		printf("%s\n", message);
-	return (return_val);
 }
 
 int	main(int argc, char **argv)

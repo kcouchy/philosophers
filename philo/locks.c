@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:30 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/16 14:25:29 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/16 17:32:23 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,19 @@ t_ullong	time_last_eat_lock(t_main *main, t_phil *phil, int mod)
 	return (time_last_eat);
 }
 
-void	eat_lock(t_phil *phil)
+int	eat_lock(t_phil *phil)
 {
 	if (phil_dead_lock(phil->main, -1) == 0)
 	{
 		pthread_mutex_lock(phil->r_fork);
 		print_lock(phil->main, phil->id, "has taken a fork");
 	}
-	if (phil_dead_lock(phil->main, -1) == 0 && (phil->r_fork != phil->l_fork))
+	if (phil->r_fork == phil->l_fork)
+	{
+		pthread_mutex_unlock(phil->r_fork);
+		return (1);
+	}
+	if (phil_dead_lock(phil->main, -1) == 0)
 	{
 		pthread_mutex_lock(phil->l_fork);
 		print_lock(phil->main, phil->id, "has taken a fork");
@@ -87,9 +92,8 @@ void	eat_lock(t_phil *phil)
 			usleep(phil->main->time_eat * 1000);
 			num_eat_lock(phil->main, phil, 1);
 		}
+		pthread_mutex_unlock(phil->l_fork);
 	}
-	else
-		usleep(phil->main->time_die * 1000);
-	pthread_mutex_unlock(phil->l_fork);
 	pthread_mutex_unlock(phil->r_fork);
+	return (0);
 }
