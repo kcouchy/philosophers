@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 12:19:44 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/15 16:48:39 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/16 14:09:37 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,20 @@ typedef struct s_phil		t_phil;
 
 typedef struct s_main
 {
-	int				phil_dead;		//flag to
-	int				num_phils;
-	t_ullong		time_die;
-	t_ullong		time_eat;
-	t_ullong		time_sleep;
+	int				phil_dead;		//flag to 1 in case a philo dies
+	int				print_flag;		//flag to 1 when philo dies so no printing
+	int				num_phils;		//input = number of philosophers
+	t_ullong		time_die;		//input = time to die (in ms)
+	t_ullong		time_eat;		//input = time to eat (in ms)
+	t_ullong		time_sleep;		//input = time to sleep (in ms)
 	int				num_eat;		//flag = 0 when all phils->num_eat = 0
 	pthread_mutex_t	*forks;			//pointer to array of pthread_mutex_t
-	t_ullong		start_time;
+	t_ullong		start_time;		//stocks time at program start
 	pthread_t		monitor_id;		//id for threadjoin
-	pthread_mutex_t	print_lock;
-	pthread_mutex_t	dead_lock;
-	pthread_mutex_t	num_eat_lock;
-	pthread_mutex_t	last_eat_lock;
+	pthread_mutex_t	print_lock;		//mutex to lock print to terminal
+	pthread_mutex_t	dead_lock;		//mutex to lock phil_dead
+	pthread_mutex_t	num_eat_lock;	//mutex to lock phil->num_eat
+	pthread_mutex_t	last_eat_lock;	//mutex to lock phil->time_last_eat
 	t_phil			*phils;			//pointer to array of philosophers t_phil
 }	t_main;
 
@@ -57,20 +58,11 @@ struct s_phil
 	pthread_mutex_t	*r_fork;		//pointer to the fork mutex (fork[n])
 	pthread_mutex_t	*l_fork;		//pointer to the fork mutex (fork[n-1])
 	pthread_t		thread_id;		//id for threadjoin
-	t_ullong		time_last_eat;
+	t_ullong		time_last_eat;	//time at start of last eat cycle (or 0)
 	t_ullong		time_wait;		//start delay for odd numbered threads
-	int				num_eat;		//countdown to 0 in case inputed
+	int				num_eat;		//countdown to 0 if inputed
 	t_main			*main;
 };
-
-// pthread_t		variable to hold the id of a thread (like pid for forks)
-// pthread_mutex_t	mutex type variable - to be locked/unlocked/joined/detached
-
-// struct timeval
-// {
-// 	time_t		tv_sec;		/* seconds */
-// 	suseconds_t	tv_usec;	/* microseconds */
-// };
 
 /* ************************************************************************** */
 /* check_inputs                                                               */
@@ -176,6 +168,8 @@ t_ullong	elapsed_time(t_main *main);
  * @param ... list of pointers to free
  */
 void		ft_free(size_t n, ...);
+
+int			ft_strcmp(char *s1, char *s2);
 
 /* ************************************************************************** */
 /* locks                                                                      */

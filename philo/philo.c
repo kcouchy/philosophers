@@ -18,7 +18,7 @@ void	*ft_philo(void *data)
 
 	phil = (t_phil *)data;
 	if (phil->id % 2 == 0)
-		usleep(phil->time_wait);
+		usleep(phil->time_wait * 1000);
 	while (phil_dead_lock(phil->main, -1) == 0
 		&& num_eat_lock(phil->main, phil, -1) != 0)
 	{
@@ -46,8 +46,8 @@ int	ft_clean(t_main *main, t_phil *phils, char *message, int return_val)
 	pthread_mutex_destroy(&(main)->num_eat_lock);
 	pthread_mutex_destroy(&(main)->last_eat_lock);
 	ft_free(2, phils, main->forks);
-	if (main->num_eat != -1)
-		print_lock(main, 0, message);
+	if (main->num_eat == 0)
+		printf("%s\n", message);
 	return (return_val);
 }
 

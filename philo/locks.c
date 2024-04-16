@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:30 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/15 13:51:05 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/16 14:25:29 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,21 @@
 void	print_lock(t_main *main, int phil, char *message)
 {
 	pthread_mutex_lock(&(main)->print_lock);
-	if (phil == 0)
-		printf("%llu %s\n", elapsed_time(main), message);
-	else
-		printf("%llu %d %s\n", elapsed_time(main), phil, message);
+	if (main->print_flag == 0)
+	{
+		if (phil == 0)
+		{
+			printf("%llu %s\n", elapsed_time(main), message);
+			main->print_flag = 1;
+		}
+		else if (ft_strcmp("died", message) == 0)
+		{
+			printf("%llu %d %s\n", elapsed_time(main), phil, message);
+			main->print_flag = 1;
+		}
+		else
+			printf("%llu %d %s\n", elapsed_time(main), phil, message);
+	}
 	pthread_mutex_unlock(&(main)->print_lock);
 }
 
@@ -60,17 +71,25 @@ t_ullong	time_last_eat_lock(t_main *main, t_phil *phil, int mod)
 
 void	eat_lock(t_phil *phil)
 {
-	pthread_mutex_lock(phil->r_fork);
-	print_lock(phil->main, phil->id, "has taken a fork");
-	pthread_mutex_lock(phil->l_fork);
-	print_lock(phil->main, phil->id, "has taken a fork");
 	if (phil_dead_lock(phil->main, -1) == 0)
 	{
-		print_lock(phil->main, phil->id, "is eating");
-		time_last_eat_lock(phil->main, phil, 1);
-		usleep(phil->main->time_eat * 1000);
-		num_eat_lock(phil->main, phil, 1);
+		pthread_mutex_lock(phil->r_fork);
+		print_lock(phil->main, phil->id, "has taken a fork");
 	}
-	pthread_mutex_unlock(phil->r_fork);
+	if (phil_dead_lock(phil->main, -1) == 0 && (phil->r_fork != phil->l_fork))
+	{
+		pthread_mutex_lock(phil->l_fork);
+		print_lock(phil->main, phil->id, "has taken a fork");
+		if (phil_dead_lock(phil->main, -1) == 0)
+		{
+			print_lock(phil->main, phil->id, "is eating");
+			time_last_eat_lock(phil->main, phil, 1);
+			usleep(phil->main->time_eat * 1000);
+			num_eat_lock(phil->main, phil, 1);
+		}
+	}
+	else
+		usleep(phil->main->time_die * 1000);
 	pthread_mutex_unlock(phil->l_fork);
+	pthread_mutex_unlock(phil->r_fork);
 }

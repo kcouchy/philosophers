@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 12:13:22 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/15 16:21:02 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/16 13:56:59 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	init_main(t_main *main, t_phil *phils)
 
 	i = -1;
 	main->phil_dead = 0;
+	main->print_flag = 0;
 	main->phils = phils;
 	main->forks = malloc(sizeof(pthread_mutex_t) * main->num_phils);
 	if (main->forks == NULL)
