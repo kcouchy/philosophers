@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:30 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/16 17:32:23 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/17 12:32:05 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ int	eat_lock(t_phil *phil)
 		print_lock(phil->main, phil->id, "has taken a fork");
 		if (phil_dead_lock(phil->main, -1) == 0)
 		{
-			print_lock(phil->main, phil->id, "is eating");
 			time_last_eat_lock(phil->main, phil, 1);
+			print_lock(phil->main, phil->id, "is eating");
 			usleep(phil->main->time_eat * 1000);
 			num_eat_lock(phil->main, phil, 1);
 		}
