@@ -6,7 +6,7 @@
 /*   By: kcouchma <kcouchma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 12:13:22 by kcouchma          #+#    #+#             */
-/*   Updated: 2024/04/17 12:29:43 by kcouchma         ###   ########.fr       */
+/*   Updated: 2024/04/17 13:04:23 by kcouchma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	point_forks(t_main *main, t_phil *phils)
 	int	i;
 
 	i = 0;
-	while (i < main->num_phils) //while (i < main->num_phils - 1)
+	while (i < main->num_phils)
 	{
 		phils[i].r_fork = &(main)->forks[i];
 		if (i == 0)
@@ -103,10 +103,5 @@ int	point_forks(t_main *main, t_phil *phils)
 			phils[i].l_fork = &(main)->forks[i - 1];
 		i++;
 	}
-	// if (i == main->num_phils - 1)
-	// {
-	// 	phils[i].r_fork = &(main)->forks[i - 1];
-	// 	phils[i].l_fork = &(main)->forks[i];
-	// }
 	return (0);
 }
